@@ -249,6 +249,15 @@ void cmark_iter_reset(cmark_iter *iter, cmark_node *current,
  * ## Accessors
  */
 
+/** Returns the ID of 'node'.
+ */
+CMARK_EXPORT const char *cmark_node_get_id(cmark_node *node);
+
+/** Sets arbitrary ID for 'node'.  Returns 1 on success,
+ * 0 on failure.
+ */
+CMARK_EXPORT int cmark_node_set_id(cmark_node *node, const char *id);
+
 /** Returns the user data of 'node'.
  */
 CMARK_EXPORT void *cmark_node_get_user_data(cmark_node *node);

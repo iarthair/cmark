@@ -32,6 +32,10 @@ struct render_state {
 static void S_render_sourcepos(cmark_node *node, cmark_strbuf *html,
                                int options) {
   char buffer[BUFFER_SIZE];
+  if (node->id != NULL) {
+    snprintf(buffer, BUFFER_SIZE, " id=\"%s\"", (char *)node->id);
+    cmark_strbuf_puts(html, buffer);
+  }
   if (CMARK_OPT_SOURCEPOS & options) {
     snprintf(buffer, BUFFER_SIZE, " data-sourcepos=\"%d:%d-%d:%d\"",
              cmark_node_get_start_line(node), cmark_node_get_start_column(node),

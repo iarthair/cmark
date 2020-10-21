@@ -65,6 +65,8 @@ struct cmark_node {
   unsigned char *data;
   bufsize_t len;
 
+  unsigned char *id;
+
   int start_line;
   int start_column;
   int end_line;

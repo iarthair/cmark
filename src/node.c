@@ -129,6 +129,7 @@ static void S_free_nodes(cmark_node *e) {
     default:
       break;
     }
+    mem->free(e->id);
     if (e->last_child) {
       // Splice children into list
       e->last_child->next = e->next;
@@ -265,6 +266,23 @@ static bufsize_t cmark_set_cstr(cmark_mem *mem, unsigned char **dst,
   }
 
   return len;
+}
+
+const char *cmark_node_get_id(cmark_node *node) {
+  if (node == NULL) {
+    return NULL;
+  }
+
+  return (char *)node->id;
+}
+
+int cmark_node_set_id(cmark_node *node, const char *id) {
+  if (node == NULL) {
+    return 0;
+  }
+
+  cmark_set_cstr(node->mem, &node->id, id);
+  return 1;
 }
 
 void *cmark_node_get_user_data(cmark_node *node) {
