@@ -38,6 +38,10 @@ static void S_render_sourcepos(cmark_node *node, cmark_strbuf *html,
              cmark_node_get_end_line(node), cmark_node_get_end_column(node));
     cmark_strbuf_puts(html, buffer);
   }
+  if (node->id != NULL) {
+    snprintf(buffer, BUFFER_SIZE, " id=\"%s\"", (char *)node->id);
+    cmark_strbuf_puts(html, buffer);
+  }
 }
 
 static int S_render_node(cmark_node *node, cmark_event_type ev_type,
