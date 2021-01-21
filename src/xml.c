@@ -43,11 +43,18 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
   cmark_delim_type delim;
   bool entering = (ev_type == CMARK_EVENT_ENTER);
   char buffer[BUFFER_SIZE];
+  const char *id;
 
   if (entering) {
     indent(state);
     cmark_strbuf_putc(xml, '<');
     cmark_strbuf_puts(xml, cmark_node_get_type_string(node));
+
+    id = cmark_node_get_id(node);
+    if (id != NULL) {
+      snprintf(buffer, BUFFER_SIZE, " xml:id=\"%s\"", id);
+      cmark_strbuf_puts(xml, buffer);
+    }
 
     if (options & CMARK_OPT_SOURCEPOS && node->start_line != 0) {
       snprintf(buffer, BUFFER_SIZE, " sourcepos=\"%d:%d-%d:%d\"",

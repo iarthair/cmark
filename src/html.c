@@ -38,6 +38,10 @@ static void S_render_sourcepos(cmark_node *node, cmark_strbuf *html,
              cmark_node_get_end_line(node), cmark_node_get_end_column(node));
     cmark_strbuf_puts(html, buffer);
   }
+}
+
+static void S_render_id(cmark_node *node, cmark_strbuf *html) {
+  char buffer[BUFFER_SIZE];
   if (node->id != NULL) {
     snprintf(buffer, BUFFER_SIZE, " id=\"%s\"", (char *)node->id);
     cmark_strbuf_puts(html, buffer);
@@ -88,6 +92,7 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
       cr(html);
       cmark_strbuf_puts(html, "<blockquote");
       S_render_sourcepos(node, html, options);
+      S_render_id(node, html);
       cmark_strbuf_puts(html, ">\n");
     } else {
       cr(html);
@@ -104,15 +109,18 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
       if (list_type == CMARK_BULLET_LIST) {
         cmark_strbuf_puts(html, "<ul");
         S_render_sourcepos(node, html, options);
+	S_render_id(node, html);
         cmark_strbuf_puts(html, ">\n");
       } else if (start == 1) {
         cmark_strbuf_puts(html, "<ol");
         S_render_sourcepos(node, html, options);
+	S_render_id(node, html);
         cmark_strbuf_puts(html, ">\n");
       } else {
         snprintf(buffer, BUFFER_SIZE, "<ol start=\"%d\"", start);
         cmark_strbuf_puts(html, buffer);
         S_render_sourcepos(node, html, options);
+	S_render_id(node, html);
         cmark_strbuf_puts(html, ">\n");
       }
     } else {
@@ -127,6 +135,7 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
       cr(html);
       cmark_strbuf_puts(html, "<li");
       S_render_sourcepos(node, html, options);
+      S_render_id(node, html);
       cmark_strbuf_putc(html, '>');
     } else {
       cmark_strbuf_puts(html, "</li>\n");
@@ -139,6 +148,7 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
       start_heading[2] = (char)('0' + node->as.heading.level);
       cmark_strbuf_puts(html, start_heading);
       S_render_sourcepos(node, html, options);
+      S_render_id(node, html);
       cmark_strbuf_putc(html, '>');
     } else {
       end_heading[3] = (char)('0' + node->as.heading.level);
@@ -153,6 +163,7 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
     if (node->as.code.info == NULL || node->as.code.info[0] == 0) {
       cmark_strbuf_puts(html, "<pre");
       S_render_sourcepos(node, html, options);
+      S_render_id(node, html);
       cmark_strbuf_puts(html, "><code>");
     } else {
       bufsize_t first_tag = 0;
@@ -163,6 +174,7 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
 
       cmark_strbuf_puts(html, "<pre");
       S_render_sourcepos(node, html, options);
+      S_render_id(node, html);
       cmark_strbuf_puts(html, "><code class=\"language-");
       escape_html(html, node->as.code.info, first_tag);
       cmark_strbuf_puts(html, "\">");
@@ -197,6 +209,7 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
     cr(html);
     cmark_strbuf_puts(html, "<hr");
     S_render_sourcepos(node, html, options);
+    S_render_id(node, html);
     cmark_strbuf_puts(html, " />\n");
     break;
 
@@ -213,6 +226,7 @@ static int S_render_node(cmark_node *node, cmark_event_type ev_type,
         cr(html);
         cmark_strbuf_puts(html, "<p");
         S_render_sourcepos(node, html, options);
+	S_render_id(node, html);
         cmark_strbuf_putc(html, '>');
       } else {
         cmark_strbuf_puts(html, "</p>\n");
